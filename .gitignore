@@ -1,0 +1,13 @@
+*.aux
+*.log
+*.out
+*.gz
+
+*.suo
+*.pdb
+*.[Cc]ache
+*.vshost.*
+*.exe.config
+[Oo]bj
+[Ll]ib
+src/dump/

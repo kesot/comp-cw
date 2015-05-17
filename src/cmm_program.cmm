@@ -1,0 +1,56 @@
+/*
+int intval = 5;
+int charval ='7';
+int charesc = '\t';
+int [10] = "dick";
+
+// SUPPADUPAPPAPA
+BULL
+    SHEEEET
+    
+void xploder(int[] xplodee){return;}
+int[] return (void) {}*/
+
+int globalstate;
+int globalarray [10];
+
+void printarr(int pars[], int len)
+{
+    int i;
+    i = 0;
+    while (i < len)
+    {
+        write pars[i];
+        i = i + 1;
+    }
+}
+
+int getlen(int pars[])
+{
+    int l;
+    l = 0;
+    while ( pars[l] != '\0' )
+        l = l + 1;
+    return l;
+}
+
+void main (void)
+{   
+    int arrln;
+    int i;
+    int arr[5];
+    
+    i = 0;
+    arrln = 5;
+    printarr("input array", 12);
+    
+    while (i < arrln)
+    {
+        read arr[i];
+        arr[i] = arr[i] + i;
+        i = i + 1;
+        if (i == 0) ; else { }
+    }
+    
+    printarr(arr, arrln);
+}

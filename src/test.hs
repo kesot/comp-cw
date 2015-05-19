@@ -18,13 +18,14 @@ encode = encodePretty
 
 main :: IO ()
 main = do
-    program <- readFile "cmm_program.cmm"
+    program <- readFile "cmm_program2.cmm"
     let tokens = alexScanTokens program
     --putStrLn $ concat $ map (\t -> show t ++ "\n") $ tokens
     let tree = happyParseToTree tokens
     print tree
     let errors = check tree
-    print errors
+    mapM_ putStrLn $ map (\(pos, err) -> "Error at " ++ show pos ++": " ++ err) errors
+    
     when (errors == []) $ do
         let ast = mkAST tree
         writeFile "cmm_program.ast" $ encode ast

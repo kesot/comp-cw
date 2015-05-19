@@ -1,0 +1,286 @@
+% !TeX document-id = {fb8a2ef5-cdaf-49da-b79d-0a8152e677cd}
+% !TeX TS-program = XeLaTeX
+\documentclass[a4paper,12pt]{report}
+\raggedbottom
+% polyglossia should go first!
+\usepackage{polyglossia} % multi-language support
+
+\setdefaultlanguage{russian}
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+
+\setmainlanguage{russian}
+\setotherlanguage{english}
+
+\DeclareSymbolFont{letters}{\encodingdefault}{\rmdefault}{m}{it}
+\usepackage{amsmath} % math symbols, new environments and stuff
+\usepackage{unicode-math} % for changing math font and unicode symbols
+\setmathfont{XITS Math}
+\allowdisplaybreaks[2]
+
+\usepackage[style=english]{csquotes} % fancy quoting
+\usepackage{microtype} % for better font rendering
+\usepackage[backend=bibtex, sorting=none]{biblatex} % for bibliography, TODO: replace with biber
+\usepackage{hyperref} % for refs and URLs
+\usepackage{graphicx} % for images (and title page)
+\usepackage{geometry} % for margins in title page
+\usepackage{tabu} % for tabulars (and title page)
+\usepackage{placeins} % for float barriers
+\usepackage{titlesec} % for section break hooks
+%\usepackage[justification=centering]{caption} % for forced captions centering
+\usepackage{subcaption} % for subfloats
+%\usepackage{rotating} % for rotated labels in tables
+%\usepackage{tikz} % for TiKZ
+%\usepackage{dot2texi} % for inline dot graphs
+\usepackage{listings} % for listings 
+\usepackage{upquote} % for good-looking quotes in source code (used for custom languages)
+\usepackage{multirow} % for multirow cells in tabulars
+%\usepackage{afterpage} % for nice landspace floats
+%\usepackage{pdflscape} % for landspace orientation
+\usepackage{xcolor} % colors!
+\usepackage{enumitem} % for unboxed description labels (long ones)
+\usepackage{lastpage}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,patterns}
+
+\lstset{
+    frame=none,
+    xleftmargin=2pt,
+    stepnumber=1,
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\ttfamily\tiny\color[gray]{0.3},
+    belowcaptionskip=\bigskipamount,
+    captionpos=b,
+    escapeinside={*'}{'*},
+    language=haskell,
+    tabsize=2,
+    emphstyle={\bf},
+    commentstyle=\it,
+    stringstyle=\mdseries\rmfamily,
+    showspaces=false,
+    keywordstyle=\bfseries\rmfamily,
+    columns=flexible,
+    basicstyle=\small\sffamily,
+    showstringspaces=false,
+    morecomment=[l]\%,
+    breaklines=true
+}
+\renewcommand\lstlistingname{Листинг}
+
+\defaultfontfeatures{Mapping=tex-text} % for converting "--" and "---"
+
+\MakeOuterQuote{"} % enable auto-quotation
+
+\newcommand{\varI}[1]{{\operatorname{\mathit{#1}}}}
+
+% new page and barrier after section, also phantom section after clearpage for
+% hyperref to get right page.
+% clearpage also outputs all active floats:
+\newcommand{\sectionbreak}{\clearpage\phantomsection}
+\newcommand{\subsectionbreak}{\FloatBarrier}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\renewcommand{\thesection}{\arabic{section}} % no chapters
+\numberwithin{equation}{section}
+%\usetikzlibrary{shapes,arrows,trees}
+
+\usepackage{expl3}
+\ExplSyntaxOn
+\cs_new_eq:NN \Repeat \prg_replicate:nn
+\ExplSyntaxOff
+
+
+\DeclareMathOperator{\rank}{rank}
+\makeatletter
+\newenvironment{sqcases}{%
+  \matrix@check\sqcases\env@sqcases
+}{%
+  \endarray\right.%
+}
+\def\env@sqcases{%
+  \let\@ifnextchar\new@ifnextchar
+  \left\lbrack
+  \def\arraystretch{1.2}%
+  \array{@{}l@{\quad}l@{}}%
+}
+\makeatother
+\setcounter{tocdepth}{3}
+
+%for abstract
+%page count \pageref{LastPage}
+\usepackage{lastpage}  
+%\totalfigures \totaltables
+\usepackage[figure,table,xspace]{totalcount}
+
+\usepackage{etoolbox}
+\newcounter{totreferences}
+\pretocmd{\bibitem}{\addtocounter{totreferences}{1}}{}{}
+\makeatletter
+     \AtEndDocument{%
+       \immediate\write\@mainaux{%
+         \string\gdef\string\totref{\number\value{totreferences}}%
+       }%
+     }
+\makeatother
+
+\bibliography{reference_list} 
+\begin{document} 
+
+%skip for title page
+\setcounter{page}{2}
+
+\tableofcontents
+
+\section{Введение}
+В настоящей работе в рамках курса "конструирование компиляторов" реализуется фронтэнд компилятора упрощённой версии языка C--.
+В работе приводится использованная грамматика языка, реализуется лексический анализатор, синтаксический анализатор.
+Проводится поиск лексических, синтаксических и смысловых ошибок, таких как типовые и другие.
+В результате работы создаётся абстрактное синтаксическое дерево, соответствующее входной программе.
+
+\section{Выбор платформы}
+Для реализации фронтэнда компилятора решено было использовать язык Haskell.
+Был использован дистрибутив MinGHC 7.10.1\cite{minghc}, содержащий компилятор GHC 7.10.1\cite{ghc}, систему сборки и управления пакетами и библиотеками Haskell Cabal 1.22.4.0\cite{cabal} и пакет утилит MSYS\cite{msys}.
+
+Также использовались генератор лексических анализаторов Alex 3.1.4\cite{alex} и генератор обобщённых LR-парсеров Happy 1.18.5\cite{happy}. 
+Для сериализации получившегося дерева в формате JSON использовался пакет Aeson 0.6.1.0\cite{aeson}.
+
+Выбор языка был обусловлен его строгой типизацией и удобством отладки благодаря жёстко отслеживаемым побочным эффектам функций, а также наличием большого количества библиотек.
+
+\section{Описание языка}
+За грамматику языка была принята упрощённая версия\cite{cmm-grammar} грамматики языка C--, дополненная строковыми литералами.
+Грамматика имеет следующий вид:
+
+\begin{align*}
+  1.~&~\varI{program}~\rightarrow~\varI{declaration-list} \\
+  2.~&~\varI{declaration-list}~\rightarrow~\varI{declaration}~\{~\varI{declaration}~\} \\
+  3.~&~\varI{declaration}~\rightarrow~\varI{var-declaration}~|~\varI{fun-declaration} \\
+  4.~&~\varI{var-declaration}~\rightarrow~\varI{type-specifier}~\mathbf{ID}~[~\boldsymbol{[}~\mathbf{NUM}~\boldsymbol{]}~]_+~\boldsymbol{;} \\
+  5.~&~\varI{type-specifier}~\rightarrow~\mathbf{int}~|~\mathbf{void} \\
+  6.~&~\varI{fun-declaration}~\rightarrow~\varI{type-specifier}~\mathbf{ID}~\boldsymbol{(}~\varI{params}~\boldsymbol{)}~\varI{compound-stmt} \\
+  7.~&~\varI{params}~\rightarrow~\mathbf{void}~|~\varI{param-list} \\
+  8.~&~\varI{param-list}~\rightarrow~\varI{param}~\{~\boldsymbol{,}~\varI{param}~\} \\
+  9.~&~\varI{param}~\rightarrow~\varI{type-specifier}~\mathbf{ID}~[~\boldsymbol{[]}~]_+ \\
+  10.~&~\varI{compound-stmt}~\rightarrow~\boldsymbol{\{}~\varI{local-declarations}~\varI{statement-list}~\boldsymbol{\}} \\
+  11.~&~\varI{local-declarations}~\rightarrow~{~\varI{var-declarations}~} \\
+  12.~&~\varI{statement-list}~\rightarrow~{~\varI{statement}~} \\  
+  13.~&~\varI{statement}~\rightarrow~\varI{expression-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{compound-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{selection-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{iteration-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{assignment-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{return-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{read-stmt}~ \\
+      &~~~~~~~~~~~~~~~~~~~~|~\varI{write-stmt} \\
+  14.~&~\varI{expression-stmt}~\rightarrow~\varI{expression}~\boldsymbol{;}~|~\boldsymbol{;} \\
+  15.~&~\varI{selection-stmt}~\rightarrow~\mathbf{if}~\boldsymbol{(}~\varI{expression}~\boldsymbol{)}~\varI{statement}~[\mathbf{else}~\varI{statement}]_+ \\
+  16.~&~\varI{iteration-stmt}~\rightarrow~\mathbf{while}~\boldsymbol{(}~\varI{expression}~\boldsymbol{)}~\varI{statement} \\
+  17.~&~\varI{return-stmt}~\rightarrow~\mathbf{return}~[expression]_+~\boldsymbol{;} \\
+  18.~&~\varI{read-stmt}~\rightarrow~\mathbf{read}~\varI{variable}~\boldsymbol{;} \\
+  19.~&~\varI{write-stmt}~\rightarrow~\mathbf{write}~\varI{expression}~\boldsymbol{;} \\
+  20.~&~\varI{expression}~\rightarrow~\{~\varI{var}~\boldsymbol{=}~\}~\varI{simple-expression} \\
+  21.~&~\varI{var}~\rightarrow~\mathbf{ID}~[~\boldsymbol{[}~\varI{expression}~\boldsymbol{]}~]_+ \\
+  22.~&~\varI{simple-expression}~\rightarrow~\varI{additive-expression}~[~\varI{relop}~\varI{additive-expression}~]_+ \\
+  23.~&~\varI{relop}~\rightarrow~\boldsymbol{<=}~|~\boldsymbol{<}~|~\boldsymbol{>}~|~\boldsymbol{>=}~|~\boldsymbol{==}~|~\boldsymbol{!=} \\
+  24.~&~\varI{additive-expression}~\rightarrow~\varI{term}~\{~\varI{addop}~\varI{term}~\} \\
+  25.~&~\varI{addop}~\rightarrow~\boldsymbol{+}~|~\boldsymbol{-} \\
+  26.~&~\varI{term}~\rightarrow~\varI{factor}~\{~\varI{multop}~\varI{factor}~\} \\
+  27.~&~\varI{multop}~\rightarrow~\boldsymbol{*}~|~\boldsymbol{/} \\
+  28.~&~\varI{factor}~\rightarrow~\boldsymbol{(}~\varI{expression}~\boldsymbol{)}~|~\mathbf{NUM}~|~\mathbf{ARR}~|~\varI{var}~|~\varI{call} \\
+  29.~&~\varI{call}~\rightarrow~\mathbf{ID}~\boldsymbol{(}~\varI{args}~\boldsymbol{)} \\
+  30.~&~\varI{args}~\rightarrow~[~\varI{arg-list}~]_+ \\
+  31.~&~\varI{arg-list}~\rightarrow~\varI{expression}~\{~\boldsymbol{,}~\varI{expression}~\}
+\end{align*}
+
+В грамматике также используются следующие регулярные выражения:
+\begin{align*}
+  1.~&~\mathbf{ID} = [a-z]+\\
+  2.~&~\mathbf{NUM} = [0-9]+ | 'PRINTABLE'\\
+  3.~&~\mathbf{ARR} = "PRINTABLE+"\\
+  4.~&~\mathbf{PRINTABLE} \text{ -- соответствует любому печатаемому символу}
+\end{align*}
+
+\section{Лексический анализ}
+\subsection{Входные и выходные структуры данных}
+На этапе лексического анализа происходит преобразование разбираемого кода в последовательность токенов, которые в дальнейшем будут обрабатываться в рамках синтаксического анализа и поиска ошибок.
+
+На вход лексического анализатора подаётся строка символов, содержащая всё содержимое файла с исходным кодом.
+Выходом лексического анализатора является строка токенов типа, определённого в листинге на рис.~\ref{lst:tokentype}.
+Смысловые значения токенов даны в таблице~\ref{tab:tokens}.
+
+\begin{table}
+    \caption{Смысловые значения выходных токенов лексера}
+    \label{tab:tokens}
+    \begin{tabu}{|l|X[r]|}
+    	\hline
+    	Токен    & Значение                                      \\ \hline
+    	$Symbol$ & Управляющий символ либо ключевое слово        \\ \hline
+    	$Num$    & Числовая константа                            \\ \hline
+    	$Array$  & Строка, преобразованная к массиву целых чисел \\ \hline
+    	$Name$   & имя переменной или функции                    \\ \hline
+    \end{tabu}
+\end{table}
+
+\begin{lstlisting}[float={},language=haskell,caption={Выходные типы данных лексера},label=lst:tokentype]
+data Token =
+    Symbol String |
+    Array [Int]   |
+    Num Int       |
+    Name String 
+    deriving (Eq, Show)
+data Posed a = Posed (Int,Int) a
+\end{lstlisting}
+
+\subsection{Обнаруживаемые ошибки}
+На данном этапе единственными ошибками, обнаруживаемыми фронтэндом, вызываются наличием в исходном коде программы символов, неприводимых к описанным выше типам токенов. 
+К примеру, лексическую ошибку вызовет встреченный лексером в любом месте программы кроме как внутри одинарных либо двойных кавычек символ $\%$.
+
+\subsection{Конфигурационный файл Alex}
+Конфигурационный файл Alex содержит регулярные выражения, соответствующие различным токенам, набор правил для их преобразования и описание выходных структур данных.
+Также в нём содержатся вспомогательные функции, используемые в правилах преобразования токенов.
+Всё содержимое конфигурационного файла приведено в листинге в приложении 1.
+Haskel-модуль генерируется из конфигурационного файла с помощью утилиты командной строки $alex$.
+
+\section{Синтаксический анализ}
+% про хэппи рассказать
+
+\section{Поиск ошибок}
+% про алекса рассказать
+
+\section{Список литературы}
+\printbibliography[heading=none]
+
+
+\section*{\titleline[r]{Приложение 1}} \addcontentsline{toc}{section}{Приложение 1}
+\subsection*{Конфигурационный файл Alex}
+\lstinputlisting{../src/cmm_alex.x}
+\clearpage
+
+\section*{\titleline[r]{Приложение 2}} \addcontentsline{toc}{section}{Приложение 2}
+\subsection*{Конфигурационный файл Happy}
+\lstinputlisting{../src/cmm_happy.y}
+\clearpage
+
+\section*{\titleline[r]{Приложение 3}} \addcontentsline{toc}{section}{Приложение 3}
+\subsection*{Модуль проверки логических ошибок}
+\lstinputlisting{../src/checker.hs}
+\clearpage
+
+\section*{\titleline[r]{Приложение 4}} \addcontentsline{toc}{section}{Приложение 4}
+\subsection*{Модуль построения выходного синтаксического дерева}
+\lstinputlisting{../src/astbuilder.hs}
+\clearpage
+
+\section*{\titleline[r]{Приложение 5}} \addcontentsline{toc}{section}{Приложение 5}
+\subsection*{Главный модуль программы}
+\lstinputlisting{../src/test.hs}
+\clearpage
+
+\section*{\titleline[r]{Приложение 6}} \addcontentsline{toc}{section}{Приложение 6}
+\subsection*{Модуль вспомогательных утилит}
+\lstinputlisting{../src/dictutils.hs}
+\clearpage
+
+\end{document}

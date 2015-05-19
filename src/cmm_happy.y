@@ -114,30 +114,30 @@ IterationStmt   ::{ TStatement }
 IterationStmt   : "while" "(" Expression ")" Statement  { IterSta $3 $5 }
 
 ReturnStmt      ::{ TStatement }
-ReturnStmt      : "return" ";"                          { let (Posed pos _) = $1 in 
-                                                             RetSta pos Nothing}
-                | "return" Expression ";"               { let (Posed pos _) = $1 in 
-                                                             RetSta pos (Just $2) }
+ReturnStmt      : "return" ";"              { let (Posed pos _) = $1
+                                              in RetSta pos Nothing}
+                | "return" Expression ";"   { let (Posed pos _) = $1
+                                              in RetSta pos (Just $2) }
 
 ReadStmt        ::{ TStatement }
-ReadStmt        : "read" Var ";"                        { ReadSta $2 }
+ReadStmt        : "read" Var ";"            { ReadSta $2 }
 
 WriteStmt       ::{ TStatement }
-WriteStmt       : "write" Expression ";"                { let (Posed p (Symbol "write")) = $1
-                                                          in ExpSta $ CallEx (Posed p ">>") [$2] }
+WriteStmt       : "write" Expression ";"    { let (Posed p (Symbol "write")) = $1
+                                              in ExpSta $ CallEx (Posed p ">>") [$2] }
 ----------------------
 Expression      ::{ TExpression }
-Expression      : ExpressionHead SimpleExpression       { ComplEx $1 $2 }
+Expression      : ExpressionHead SimpleExpression  { ComplEx $1 $2 }
 
 ExpressionHead  ::{ [Reference] }
-ExpressionHead  : {--}                                  { [] }
-                | ExpressionHead Var "="                { $1 ++ [$2] }
+ExpressionHead  : {--}                      { [] }
+                | ExpressionHead Var "="    { $1 ++ [$2] }
 
 Var             ::{ Reference }
-Var             : name                                  { let (Posed p (Name n)) = $1
-                                                          in (Posed p n, Nothing) }
-                | name "[" Expression "]"               { let (Posed p (Name n)) = $1
-                                                          in (Posed p n, Just $3) }
+Var             : name                      { let (Posed p (Name n)) = $1
+                                              in (Posed p n, Nothing) }
+                | name "[" Expression "]"   { let (Posed p (Name n)) = $1
+                                              in (Posed p n, Just $3) }
 
 SimpleExpression::{ TExpression }
 SimpleExpression: AdditiveExpression                            { $1 }
@@ -145,12 +145,12 @@ SimpleExpression: AdditiveExpression                            { $1 }
                                                                   in CallEx (Posed p n) [$1, $3] }
 
 Relop           ::{ Posed Token }
-Relop           : "<="                                  { $1 }
-                | "<"                                   { $1 }
-                | ">"                                   { $1 }
-                | ">="                                  { $1 }
-                | "=="                                  { $1 }
-                | "!="                                  { $1 }
+Relop           : "<="             { $1 }
+                | "<"              { $1 }
+                | ">"              { $1 }
+                | ">="             { $1 }
+                | "=="             { $1 }
+                | "!="             { $1 }
 
 AdditiveExpression::{ TExpression }
 AdditiveExpression  : Term                              { $1 }
@@ -158,34 +158,34 @@ AdditiveExpression  : Term                              { $1 }
                                                           in CallEx (Posed p n) [$1, $3] }
 
 Addop           ::{ Posed Token }
-Addop           : "+"                                   { $1 }
-                | "-"                                   { $1 }
+Addop           : "+"              { $1 }
+                | "-"              { $1 }
 
 Term            ::{ TExpression }
-Term            : Factor                                { $1 }
-                | Term Multop Factor                    { let (Posed p (Symbol n)) = $2
-                                                          in CallEx (Posed p n) [$1, $3] }
+Term            : Factor             { $1 }
+                | Term Multop Factor { let (Posed p (Symbol n)) = $2
+                                       in CallEx (Posed p n) [$1, $3] }
 Multop          ::{ Posed Token }
-Multop          : "*"                                   { $1 }
-                | "/"                                   { $1 }
+Multop          : "*"              { $1 }
+                | "/"              { $1 }
 
 Factor          ::{ TExpression }
-Factor          : "(" Expression ")"                    { $2 }
-                | num                                   { let (Posed p (Num n)) = $1
-                                                          in NumLiteral $ Posed p n }
-                | array                                 { let (Posed p (Array n)) = $1
-                                                          in StringLiteral $ Posed p n }
-                | Var                                   { Retrieval $1 }
-                | Call                                  { $1 }
+Factor          : "(" Expression ")" { $2 }
+                | num                { let (Posed p (Num n)) = $1
+                                       in NumLiteral $ Posed p n }
+                | array              { let (Posed p (Array n)) = $1
+                                       in StringLiteral $ Posed p n }
+                | Var                { Retrieval $1 }
+                | Call               { $1 }
 
 Call            ::{ TExpression }
-Call            : name "(" Args ")"                     { let (Posed p (Name n)) = $1
-                                                          in CallEx (Posed p n) $3 }
+Call            : name "(" Args ")"  { let (Posed p (Name n)) = $1
+                                       in CallEx (Posed p n) $3 }
 
 Args            ::{ [TExpression] }
-Args            : {--}                                  { [] }
-                | Expression                            { [$1] }
-                | Args "," Expression                   { $1 ++ [$3] }
+Args            : {--}                { [] }
+                | Expression          { [$1] }
+                | Args "," Expression { $1 ++ [$3] }
 
 {
 parseError :: Show b => [Posed b] -> a

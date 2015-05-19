@@ -28,33 +28,3 @@ main = do
     when (errors == []) $ do
         let ast = mkAST tree
         writeFile "cmm_program.ast" $ encode ast
-    -- синтаксический, лексический и типовый анализ
-    -- построить AST
-    
-{-
-
-type Reference = (Posed String, Maybe (TExpression))
-data TExpression =
-    ComplEx [Reference] TExpression
-    | CallEx (Posed String) [TExpression]
-    | Retrieval Reference
-    | StringLiteral (Posed [Int])
-    | NumLiteral (Posed Int)
-    deriving (Show, Eq)
-data TStatement =
-    CompSta [TDeclaration] [TStatement]
-    | SelSta TExpression TStatement (Maybe TStatement)
-    | IterSta TExpression TStatement
-    | RetSta (Maybe TExpression)
-    | ReadSta Reference
-    | ExpSta TExpression
-    | EmpSta
-    deriving (Show, Eq)
-data TDeclaration =
-    Intdecl (Posed String)
-    | Arrdecl (Posed String) (Posed Int)
-    | Fundecl (Posed String) [TDeclaration] TStatement
-    | Procdecl (Posed String) [TDeclaration] TStatement
-    deriving (Show, Eq)
-}
--}

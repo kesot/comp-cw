@@ -26,12 +26,12 @@ data Statement =
     deriving (Eq, Show, Generic, ToJSON)
     
 data Expression =
-    ConstInt Int |
-    ConstArr [Int] |
-    Takeval Expression |
-    Takeadr String |
-    Call String [Expression] |
-    Assign [Expression] Expression
+    ConstInt Int |              -- 7
+    ConstArr [Int] |            -- [7,8,9]
+    Takeval Expression |        -- (*7) :: Address->Value / first element of array
+    Takeadr String |            -- (&x) :: Name->Address
+    Call String [Expression] |  
+    Assign [Expression] Expression  -- adr1 = adr2 = adr3 = 7
     deriving (Eq, Show, Generic, ToJSON)
 
 convexpr::TExpression->Expression    

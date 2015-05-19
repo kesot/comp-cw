@@ -11,3 +11,10 @@
 [Oo]bj
 [Ll]ib
 src/dump/
+
+*.bib
+*.bbl
+*.blf
+*.run.xml
+*.toc
+*.blg

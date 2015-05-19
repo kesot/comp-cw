@@ -55,7 +55,6 @@ checkTopLevel (d:ecl) prevdecls =
                 (pos, "Redefinition of variable"):checkTopLevel ecl prevdecls
                | otherwise ->
                 checkTopLevel ecl ((nam, (Number, pos)):prevdecls)
-            
         Arrdecl (Posed posn nam) (Posed poss siz) ->
             if | haskey nam prevdecls -> 
                 (posn, "Redefinition of variable"):checkTopLevel ecl prevdecls
@@ -63,7 +62,6 @@ checkTopLevel (d:ecl) prevdecls =
                 (poss, "Nonpositive array size"):checkTopLevel ecl prevdecls
                | otherwise ->
                 checkTopLevel ecl ((nam, (Reference, posn)):prevdecls)
-                
         Fundecl (Posed pos nam) paramsraw body ->
             if | haskey nam prevdecls -> 
                 (pos, "Redefinition of variable"):checkTopLevel ecl prevdecls
@@ -74,7 +72,6 @@ checkTopLevel (d:ecl) prevdecls =
                     fdcl = (nam, (Function fntype, pos))
                 in bodyerrors ++ parerrors ++ 
                     checkTopLevel ecl (fdcl:prevdecls)
-                    
         Procdecl (Posed pos nam) paramsraw body ->
             if | haskey nam prevdecls -> 
                 (pos, "Redefinition of variable"):checkTopLevel ecl prevdecls
@@ -85,7 +82,6 @@ checkTopLevel (d:ecl) prevdecls =
                     fdcl = (nam, (Function fntype, pos))
                 in bodyerrors ++ parerrors ++ 
                     checkTopLevel ecl (fdcl:prevdecls) 
-
 
 checkstat::[Namedecl]->TStatement->Typ->[Error]
 checkstat prevdecls statement rettyp = 
@@ -140,7 +136,6 @@ checkexpr typ decls expr =
                         (Just (chaintype, _), Nothing) -> 
                             (pos, "Type mismatch: expected " ++ show typ)
                             :(checkexpr typ decls (ComplEx ssigns cexpr)) 
-                            
         CallEx (Posed pos nam) argexprs -> 
             case lookup nam decls of
                 Nothing -> [(pos, "Unknown variable")]

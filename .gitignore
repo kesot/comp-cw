@@ -20,3 +20,4 @@ src/dump/
 *.blg
 *.synctex.gz(busy)
 *.synctex.gz
+*/tmp/

@@ -18,20 +18,20 @@ data Funcdecl = Funcdecl String [String] Statement deriving (Eq, Show, Generic, 
 type Declaration = Either Vardecl Funcdecl
     
 data Statement =
-    Complex [Vardecl] [Statement] |
-    Ite Expression Statement (Maybe Statement) |
-    While Expression Statement |
-    Expsta Expression |
-    Return (Maybe Expression)
+    Complex [Vardecl] [Statement]
+    | Ite Expression Statement (Maybe Statement)
+    | While Expression Statement
+    | Expsta Expression
+    | Return (Maybe Expression)
     deriving (Eq, Show, Generic, ToJSON)
     
 data Expression =
-    ConstInt Int |              -- 7
-    ConstArr [Int] |            -- [7,8,9]
-    Takeval Expression |        -- (*7) :: Address->Value / first element of array
-    Takeadr String |            -- (&x) :: Name->Address
-    Call String [Expression] |  
-    Assign [Expression] Expression  -- adr1 = adr2 = adr3 = 7
+    ConstInt Int                -- 7
+    | ConstArr [Int]            -- [7,8,9]
+    | Takeval Expression        -- (*7) :: Address->Value / first element of array
+    | Takeadr String            -- (&x) :: Name->Address
+    | Call String [Expression]  
+    | Assign [Expression] Expression  -- adr1 = adr2 = adr3 = 7
     deriving (Eq, Show, Generic, ToJSON)
 
 convexpr::TExpression->Expression    

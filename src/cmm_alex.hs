@@ -21,6 +21,26 @@ import Char (ord)
 {-# LINE 1 "templates\\wrappers.hs" #-}
 {-# LINE 1 "<built-in>" #-}
 {-# LINE 1 "<command-line>" #-}
+{-# LINE 9 "<command-line>" #-}
+{-# LINE 1 "C:\\Users\\Dantrag\\AppData\\Local\\Programs\\minghc-7.10.1-x86_64\\ghc-7.10.1\\lib/include\\ghcversion.h" #-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{-# LINE 9 "<command-line>" #-}
 {-# LINE 1 "templates\\wrappers.hs" #-}
 -- -----------------------------------------------------------------------------
 -- Alex wrapper code.
@@ -28,8 +48,9 @@ import Char (ord)
 -- This code is in the PUBLIC DOMAIN; you may copy it freely and use
 -- it for any purpose whatsoever.
 
+import Control.Applicative (Applicative (..))
 import Data.Word (Word8)
-{-# LINE 22 "templates\\wrappers.hs" #-}
+{-# LINE 23 "templates\\wrappers.hs" #-}
 
 import qualified Data.Bits
 
@@ -81,11 +102,11 @@ alexGetByte (p,_,[],(c:s))  = let p' = alexMove p c
                               in p' `seq`  Just (b, (p', c, bs, s))
 
 
-{-# LINE 92 "templates\\wrappers.hs" #-}
+{-# LINE 93 "templates\\wrappers.hs" #-}
 
-{-# LINE 106 "templates\\wrappers.hs" #-}
+{-# LINE 107 "templates\\wrappers.hs" #-}
 
-{-# LINE 121 "templates\\wrappers.hs" #-}
+{-# LINE 122 "templates\\wrappers.hs" #-}
 
 -- -----------------------------------------------------------------------------
 -- Token positions
@@ -113,27 +134,27 @@ alexMove (AlexPn a l c) _    = AlexPn (a+1)  l     (c+1)
 -- -----------------------------------------------------------------------------
 -- Default monad
 
-{-# LINE 242 "templates\\wrappers.hs" #-}
+{-# LINE 256 "templates\\wrappers.hs" #-}
 
 
 -- -----------------------------------------------------------------------------
 -- Monad (with ByteString input)
 
-{-# LINE 333 "templates\\wrappers.hs" #-}
+{-# LINE 347 "templates\\wrappers.hs" #-}
 
 
 -- -----------------------------------------------------------------------------
 -- Basic wrapper
 
-{-# LINE 360 "templates\\wrappers.hs" #-}
+{-# LINE 374 "templates\\wrappers.hs" #-}
 
 
 -- -----------------------------------------------------------------------------
 -- Basic wrapper, ByteString version
 
-{-# LINE 378 "templates\\wrappers.hs" #-}
-
 {-# LINE 392 "templates\\wrappers.hs" #-}
+
+{-# LINE 406 "templates\\wrappers.hs" #-}
 
 
 -- -----------------------------------------------------------------------------
@@ -156,7 +177,7 @@ alexScanTokens str = go (alexStartPos,'\n',[],str)
 -- -----------------------------------------------------------------------------
 -- Posn wrapper, ByteString version
 
-{-# LINE 424 "templates\\wrappers.hs" #-}
+{-# LINE 438 "templates\\wrappers.hs" #-}
 
 
 -- -----------------------------------------------------------------------------
@@ -212,6 +233,26 @@ alex_action_7 = pose Symbol
 {-# LINE 1 "templates\\GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
 {-# LINE 1 "<command-line>" #-}
+{-# LINE 8 "<command-line>" #-}
+{-# LINE 1 "C:\\Users\\Dantrag\\AppData\\Local\\Programs\\minghc-7.10.1-x86_64\\ghc-7.10.1\\lib/include\\ghcversion.h" #-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{-# LINE 8 "<command-line>" #-}
 {-# LINE 1 "templates\\GenericTemplate.hs" #-}
 -- -----------------------------------------------------------------------------
 -- ALEX TEMPLATE

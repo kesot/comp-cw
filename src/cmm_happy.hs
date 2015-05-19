@@ -8,8 +8,9 @@ module Cmm_happy(
     )where
 import Cmm_alex
 import Control.Applicative(Applicative(..))
+import Control.Monad (ap)
 
--- parser produced by Happy Version 1.19.4
+-- parser produced by Happy Version 1.19.5
 
 data HappyAbsSyn 
 	= HappyTerminal (Posed Token)
@@ -942,8 +943,8 @@ happyReduce_32 = happySpecReduce_2  18 happyReduction_32
 happyReduction_32 _
 	(HappyTerminal happy_var_1)
 	 =  HappyAbsSyn11
-		 (let (Posed pos _) = happy_var_1 in 
-                                                             RetSta pos Nothing
+		 (let (Posed pos _) = happy_var_1
+                                              in RetSta pos Nothing
 	)
 happyReduction_32 _ _  = notHappyAtAll 
 
@@ -952,8 +953,8 @@ happyReduction_33 _
 	(HappyAbsSyn21  happy_var_2)
 	(HappyTerminal happy_var_1)
 	 =  HappyAbsSyn11
-		 (let (Posed pos _) = happy_var_1 in 
-                                                             RetSta pos (Just happy_var_2)
+		 (let (Posed pos _) = happy_var_1
+                                              in RetSta pos (Just happy_var_2)
 	)
 happyReduction_33 _ _ _  = notHappyAtAll 
 
@@ -972,7 +973,7 @@ happyReduction_35 _
 	(HappyTerminal happy_var_1)
 	 =  HappyAbsSyn11
 		 (let (Posed p (Symbol "write")) = happy_var_1
-                                                          in ExpSta $ CallEx (Posed p ">>") [happy_var_2]
+                                              in ExpSta $ CallEx (Posed p ">>") [happy_var_2]
 	)
 happyReduction_35 _ _ _  = notHappyAtAll 
 
@@ -1002,7 +1003,7 @@ happyReduce_39 = happySpecReduce_1  23 happyReduction_39
 happyReduction_39 (HappyTerminal happy_var_1)
 	 =  HappyAbsSyn23
 		 (let (Posed p (Name n)) = happy_var_1
-                                                          in (Posed p n, Nothing)
+                                              in (Posed p n, Nothing)
 	)
 happyReduction_39 _  = notHappyAtAll 
 
@@ -1014,7 +1015,7 @@ happyReduction_40 (_ `HappyStk`
 	happyRest)
 	 = HappyAbsSyn23
 		 (let (Posed p (Name n)) = happy_var_1
-                                                          in (Posed p n, Just happy_var_3)
+                                              in (Posed p n, Just happy_var_3)
 	) `HappyStk` happyRest
 
 happyReduce_41 = happySpecReduce_1  24 happyReduction_41
@@ -1120,7 +1121,7 @@ happyReduction_54 (HappyAbsSyn21  happy_var_3)
 	(HappyAbsSyn21  happy_var_1)
 	 =  HappyAbsSyn21
 		 (let (Posed p (Symbol n)) = happy_var_2
-                                                          in CallEx (Posed p n) [happy_var_1, happy_var_3]
+                                       in CallEx (Posed p n) [happy_var_1, happy_var_3]
 	)
 happyReduction_54 _ _ _  = notHappyAtAll 
 
@@ -1151,7 +1152,7 @@ happyReduce_58 = happySpecReduce_1  30 happyReduction_58
 happyReduction_58 (HappyTerminal happy_var_1)
 	 =  HappyAbsSyn21
 		 (let (Posed p (Num n)) = happy_var_1
-                                                          in NumLiteral $ Posed p n
+                                       in NumLiteral $ Posed p n
 	)
 happyReduction_58 _  = notHappyAtAll 
 
@@ -1159,7 +1160,7 @@ happyReduce_59 = happySpecReduce_1  30 happyReduction_59
 happyReduction_59 (HappyTerminal happy_var_1)
 	 =  HappyAbsSyn21
 		 (let (Posed p (Array n)) = happy_var_1
-                                                          in StringLiteral $ Posed p n
+                                       in StringLiteral $ Posed p n
 	)
 happyReduction_59 _  = notHappyAtAll 
 
@@ -1185,7 +1186,7 @@ happyReduction_62 (_ `HappyStk`
 	happyRest)
 	 = HappyAbsSyn21
 		 (let (Posed p (Name n)) = happy_var_1
-                                                          in CallEx (Posed p n) happy_var_3
+                                       in CallEx (Posed p n) happy_var_3
 	) `HappyStk` happyRest
 
 happyReduce_63 = happySpecReduce_0  32 happyReduction_63
@@ -1259,8 +1260,8 @@ instance Functor HappyIdentity where
     fmap f (HappyIdentity a) = HappyIdentity (f a)
 
 instance Applicative HappyIdentity where
-    pure    = return
-    a <*> b = (fmap id a) <*> b
+    pure  = return
+    (<*>) = ap
 instance Monad HappyIdentity where
     return = HappyIdentity
     (HappyIdentity p) >>= q = q p
@@ -1282,7 +1283,7 @@ happySeq = happyDontSeq
 
 
 parseError :: Show b => [Posed b] -> a
-parseError ((Posed p t):rst) = error $ "Parse error at " ++ (show p) ++ ": unexpected symbol " ++ (show t)
+parseError ((Posed p t):rst) = error $ "Syntax error at " ++ (show p) ++ ": unexpected symbol \"" ++ (show t) ++ "\""
 
 type Reference = (Posed String, Maybe (TExpression))
 data TExpression =
@@ -1311,6 +1312,26 @@ data TDeclaration =
 {-# LINE 1 "templates\\GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
 {-# LINE 1 "<command-line>" #-}
+{-# LINE 8 "<command-line>" #-}
+{-# LINE 1 "C:\\Users\\Dantrag\\AppData\\Local\\Programs\\minghc-7.10.1-x86_64\\ghc-7.10.1\\lib/include\\ghcversion.h" #-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{-# LINE 8 "<command-line>" #-}
 {-# LINE 1 "templates\\GenericTemplate.hs" #-}
 -- Id: GenericTemplate.hs,v 1.26 2005/01/14 14:47:22 simonmar Exp 
 

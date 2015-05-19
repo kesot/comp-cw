@@ -189,7 +189,7 @@ Args            : {--}                { [] }
 
 {
 parseError :: Show b => [Posed b] -> a
-parseError ((Posed p t):rst) = error $ "Parse error at " ++ (show p) ++ ": unexpected symbol " ++ (show t)
+parseError ((Posed p t):rst) = error $ "Syntax error at " ++ (show p) ++ ": unexpected symbol \"" ++ (show t) ++ "\""
 
 type Reference = (Posed String, Maybe (TExpression))
 data TExpression =

@@ -18,3 +18,5 @@ src/dump/
 *.run.xml
 *.toc
 *.blg
+*.synctex.gz(busy)
+*.synctex.gz

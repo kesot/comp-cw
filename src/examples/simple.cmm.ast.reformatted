@@ -1,0 +1,74 @@
+[ { "Right": [ "printarr", [ "pars"],
+      { "tag": "Complex",
+        "contents": [
+          [ [ "i",
+              { "tag": "Number",
+                "contents": [] }]],
+          [ { "tag": "Expsta",
+              "contents": {
+                "tag": "Assign",
+                "contents": [
+                  [ { "tag": "Takeadr",
+                      "contents": "i"}],
+                  { "tag": "ConstInt", "contents": 0 }]}},
+            { "tag": "While",
+              "contents": [
+                { "tag": "Call",
+                  "contents": [
+                    "!=",
+                    [ { "tag": "Takeval",
+                        "contents": {
+                          "tag": "Call",
+                          "contents": [
+                            "+",
+                            [ { "tag": "Takeadr",
+                                "contents": "pars"},
+                              { "tag": "Takeval",
+                                "contents": {
+                                  "tag": "Takeadr",
+                                  "contents": "i" }}]]}},
+                      { "tag": "ConstInt", "contents": 0 }]]},
+                { "tag": "Complex",
+                  "contents": [
+                    [],
+                    [ { "tag": "Expsta",
+                        "contents": {
+                          "tag": "Call",
+                          "contents": [
+                            ">>",
+                            [ { "tag": "Takeval",
+                                "contents": {
+                                  "tag": "Call",
+                                  "contents": [
+                                    "+",
+                                    [ { "tag": "Takeadr",
+                                        "contents": "pars"},
+                                      { "tag": "Takeval",
+                                        "contents": {
+                                          "tag": "Takeadr",
+                                          "contents": "i" }}]]}}]]}},
+                      { "tag": "Expsta",
+                        "contents": {
+                          "tag": "Assign",
+                          "contents": [
+                            [ { "tag": "Takeadr",
+                                "contents": "i"}],
+                            { "tag": "Call",
+                              "contents": [
+                                "+",
+                                [ { "tag": "Takeval",
+                                    "contents": {
+                                      "tag": "Takeadr",
+                                      "contents": "i"}},
+                                  { "tag": "ConstInt", "contents": 1 }]]}]}}]]}]}]]}]},
+  { "Right": [
+      "main", [],
+      { "tag": "Complex",
+        "contents": [
+          [],
+          [ { "tag": "Expsta",
+              "contents": {
+                "tag": "Call",
+                "contents": [
+                  "printarr",
+                  [ { "tag": "ConstArr", "contents": [72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 0] }]]}}]]}]}]

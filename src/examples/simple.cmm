@@ -1,0 +1,15 @@
+void printarr(int pars[])
+{
+    int i;
+    i = 0;
+    while (pars[i] != '\0')
+    {
+        write pars[i];
+        i = i + 1;
+    }
+}
+
+void main (void)
+{   
+    printarr("Hello World!");
+}
